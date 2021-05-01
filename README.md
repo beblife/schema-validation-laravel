@@ -3,6 +3,7 @@
 Validate HTTP-requests using OpenAPI specification files or JSON-schema objects in Laravel.
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/vpre/beblife/schema-validation-laravel.svg?style=flat-square)](https://packagist.org/packages/beblife/schema-validation-laravel)
+![PHP from Packagist](https://img.shields.io/packagist/php-v/beblife/schema-validation-laravel)
 
 ## Installation
 
