@@ -1,0 +1,46 @@
+{
+    "name": "beblife/schema-validation-laravel",
+    "description": "Validate HTTP-requests using JSON-schema objects",
+    "license": "MIT",
+    "keywords": [
+        "json schema",
+        "open api",
+        "schema validation laravel"
+    ],
+    "require": {
+        "league/openapi-psr7-validator": "^0.16",
+        "spatie/laravel-package-tools": "dev-master"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.18",
+        "mockery/mockery": "^1.4",
+        "orchestra/testbench": "^6.14",
+        "phpunit/phpunit": "^9.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Beblife\\SchemaValidation\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Beblife\\SchemaValidation\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "format": "vendor/bin/php-cs-fixer fix . -vvv"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Beblife\\SchemaValidation\\SchemaValidationServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

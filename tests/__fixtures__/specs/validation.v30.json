@@ -1,0 +1,197 @@
+{
+    "title": "Sample Packages app",
+    "description": "This is a sample server for a packages app.",
+    "termsOfService": "https://packages.sample.com/terms/",
+    "contact": {
+        "name": "API Support",
+        "url": "https://www.packages.sample.com/support",
+        "email": "support@sample.com"
+    },
+    "license": {
+        "name": "Apache 2.0",
+        "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "3.0.3",
+    "paths": {
+        "/query-parameters": {
+            "get": {
+                "required": [
+                    "required_field"
+                ],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "required_field",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "strict_limit",
+                        "schema": {
+                            "type": "number",
+                            "minimum": 1,
+                            "exclusiveMinimum": false,
+                            "maximum": 25,
+                            "exclusiveMaximum": false
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "limit",
+                        "schema": {
+                            "type": "number",
+                            "minimum": 1,
+                            "exclusiveMinimum": true,
+                            "maximum": 25,
+                            "exclusiveMaximum": true
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "length",
+                        "schema": {
+                            "type": "string",
+                            "minLength": 5,
+                            "maxLength": 8
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "enum",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "php",
+                                "js"
+                            ]
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "email",
+                        "schema": {
+                            "type": "string",
+                            "format": "email"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "mixed",
+                        "schema": {
+                            "oneOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "number"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "number_array",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "object_array",
+                        "schema": {
+                            "type": "array",
+                            "minItems": 1,
+                            "maxItems": 2,
+                            "uniqueItems": true,
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "field": {
+                                        "type": "integer"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "object",
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "required_field"
+                            ],
+                            "properties": {
+                                "required_field": {
+                                    "type": "boolean"
+                                },
+                                "nested": {
+                                    "type": "object",
+                                    "required": [
+                                        "required_field"
+                                    ],
+                                    "properties": {
+                                        "required_field": {
+                                            "type": "boolean"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "object_properties",
+                        "schema": {
+                            "type": "object",
+                            "minProperties": 1,
+                            "maxProperties": 2
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "file_byte",
+                        "schema": {
+                            "type": "string",
+                            "format": "byte"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "pattern",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^(\\([0-9]{3}\\))?[0-9]{3}-[0-9]{4}$"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "multiple_of",
+                        "schema": {
+                            "type": "number",
+                            "multipleOf": 2
+                        }
+                    }
+                ]
+            }
+        },
+        "/body-parameters": {
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "./schemas/all-validation.json"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

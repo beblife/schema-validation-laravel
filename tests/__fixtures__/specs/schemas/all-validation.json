@@ -1,0 +1,110 @@
+{
+    "type": "object",
+    "required": [
+        "required_field"
+    ],
+    "properties": {
+        "required_field": {
+            "type": "boolean"
+        },
+        "strict_limit": {
+            "type": "number",
+            "minimum": 1,
+            "exclusiveMinimum": false,
+            "maximum": 25,
+            "exclusiveMaximum": false
+        },
+        "limit": {
+            "type": "number",
+            "minimum": 1,
+            "exclusiveMinimum": true,
+            "maximum": 25,
+            "exclusiveMaximum": true
+        },
+        "length": {
+            "type": "string",
+            "minLength": 5,
+            "maxLength": 8
+        },
+        "enum": {
+            "type": "string",
+            "enum": [
+                "php",
+                "js"
+            ]
+        },
+        "email": {
+            "type": "string",
+            "format": "email"
+        },
+        "mixed": {
+            "oneOf": [
+                {
+                    "type": "string"
+                },
+                {
+                    "type": "number"
+                }
+            ]
+        },
+        "number_array": {
+            "type": "array",
+            "items": {
+                "type": "integer"
+            }
+        },
+        "object_array": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 2,
+            "uniqueItems": true,
+            "items": {
+                "type": "object",
+                "properties": {
+                    "field": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "object": {
+            "type": "object",
+            "required": [
+                "required_field"
+            ],
+            "properties": {
+                "required_field": {
+                    "type": "boolean"
+                },
+                "nested": {
+                    "type": "object",
+                    "required": [
+                        "required_field"
+                    ],
+                    "properties": {
+                        "required_field": {
+                            "type": "boolean"
+                        }
+                    }
+                }
+            }
+        },
+        "object_properties": {
+            "type": "object",
+            "minProperties": 1,
+            "maxProperties": 2
+        },
+        "file_byte": {
+            "type": "string",
+            "format": "byte"
+        },
+        "pattern": {
+            "type": "string",
+            "pattern": "^(\\([0-9]{3}\\))?[0-9]{3}-[0-9]{4}$"
+        },
+        "multiple_of": {
+            "type": "number",
+            "multipleOf": 2
+        }
+    }
+}
