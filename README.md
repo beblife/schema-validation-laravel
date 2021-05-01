@@ -1,5 +1,9 @@
 # Schema Validation Laravel
 
+Validate HTTP-requests using OpenAPI specification files or JSON-schema objects in Laravel.
+
+[![Latest Version on Packagist](https://img.shields.io/packagist/vpre/beblife/schema-validation-laravel.svg?style=flat-square)](https://packagist.org/packages/beblife/schema-validation-laravel)
+
 ## Installation
 
 This package can be installed through Composer:
@@ -128,3 +132,8 @@ class MyCustomSchema implements Schema
         ]
     }
 }
+```
+
+## License
+
+The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
