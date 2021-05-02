@@ -2,12 +2,17 @@
 
 namespace Beblife\SchemaValidation\Exceptions;
 
-use Illuminate\Http\Response;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpFoundation\Response;
 
 class InvalidSchema extends ValidationException
 {
-    public $status = Response::HTTP_BAD_REQUEST;
+    public function __construct(Validator $validator, ?Response $response = null, string $errorBag = 'default')
+    {
+        parent::__construct($validator, $response, $errorBag);
+        $this->status = config('schema-validation.response.status', $this->status);
+    }
 
     public static function becauseInvalidKeyword(string $key, string $message): self
     {
