@@ -22,10 +22,15 @@ Once published you will have a `config/schema-validation.php` file that looks li
 ```php
 return [
     'spec_path' => env('SCHEMA_VALIDATION_SPEC_PATH', ''),
+
+    'response' => [
+        'status' => 400,
+    ],
 ];
 ```
 
 You can define the spec path as a `.env` variable or hardcode the absolute path in the configuration file itself.
+The status code when a validation exception is thrown can also be customised here.
 
 ## Usage
 
