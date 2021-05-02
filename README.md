@@ -4,6 +4,7 @@ Validate HTTP-requests using OpenAPI specification files or JSON-schema objects 
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/vpre/beblife/schema-validation-laravel.svg?style=flat-square)](https://packagist.org/packages/beblife/schema-validation-laravel)
 ![PHP from Packagist](https://img.shields.io/packagist/php-v/beblife/schema-validation-laravel?style=flat-square)
+![CI](https://github.com/beblife/schema-validation-laravel/workflows/CI/badge.svg)
 
 ## Installation
 
@@ -142,4 +143,4 @@ class MyCustomSchema implements Schema
 
 ## License
 
-The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+The MIT License (MIT). Please see [License File](LICENSE) for more information.
