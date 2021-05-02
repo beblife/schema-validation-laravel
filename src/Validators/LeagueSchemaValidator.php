@@ -129,7 +129,9 @@ class LeagueSchemaValidator implements SchemaValidator
             $data = (string) $data;
         }
 
-        $message = collect([
+        $message = $keywordMismatch->getMessage();
+
+        foreach([
             'Keyword validation failed: ' => '',
             'Value ' . $data => 'Value',
             "Value '{$data}'" => 'Value',
@@ -137,9 +139,9 @@ class LeagueSchemaValidator implements SchemaValidator
             'Size of an array' => 'Size',
             'All array' => 'All',
             "The number of object's" => 'Object',
-         ])->reduce(function (string $message, string $replace, string $search) {
-            return str_replace($search, $replace, $message);
-         }, $keywordMismatch->getMessage());
+         ] as $search => $replace) {
+            $message = str_replace($search, $replace, $message);
+         }
 
         if(Str::endsWith($message, '.')) {
             return $message;
