@@ -15,8 +15,7 @@ use Illuminate\Support\Str;
 use League\OpenAPIValidation\PSR7\Exception\NoPath;
 use League\OpenAPIValidation\PSR7\Exception\Validation\InvalidBody;
 use League\OpenAPIValidation\PSR7\Exception\Validation\InvalidQueryArgs;
-use League\OpenAPIValidation\PSR7\OperationAddress;
-use League\OpenAPIValidation\PSR7\RoutedServerRequestValidator;
+use League\OpenAPIValidation\PSR7\ServerRequestValidator;
 use League\OpenAPIValidation\PSR7\ValidatorBuilder;
 use League\OpenAPIValidation\Schema\Exception\KeywordMismatch;
 use League\OpenAPIValidation\Schema\SchemaValidator as LeagueValidator;
@@ -27,17 +26,17 @@ class LeagueSchemaValidator implements SchemaValidator
 {
     protected ValidatorBuilder $builder;
 
-    protected RoutedServerRequestValidator $validator;
+    protected ServerRequestValidator $validator;
 
     public function __construct(string $specPath)
     {
         $this->builder = new ValidatorBuilder();
 
         try {
-            $this->validator = $this->builder->fromJsonFile($specPath)->getRoutedRequestValidator();
+            $this->validator = $this->builder->fromJsonFile($specPath)->getServerRequestValidator();
         } catch(TypeError $execption) {
             try {
-                $this->validator = $this->builder->fromYamlFile($specPath)->getRoutedRequestValidator();
+                $this->validator = $this->builder->fromYamlFile($specPath)->getServerRequestValidator();
             } catch(TypeError $execption) {
                 throw $execption;
             }
@@ -67,10 +66,7 @@ class LeagueSchemaValidator implements SchemaValidator
     protected function validateFromSpec(Request $request): void
     {
         try {
-            $this->validator->validate(
-                $this->toOperationAddress($request),
-                $this->toServerRequest($request),
-            );
+            $this->validator->validate($this->toServerRequest($request));
         } catch(InvalidQueryArgs $exeception) {
             throw $this->validationException($exeception->getPrevious()->getPrevious());
         } catch(InvalidBody $exception) {
@@ -92,11 +88,6 @@ class LeagueSchemaValidator implements SchemaValidator
         } catch (KeywordMismatch $keywordMismatch) {
             throw $this->validationException($keywordMismatch);
         }
-    }
-
-    protected function toOperationAddress(Request $request): OperationAddress
-    {
-        return new OperationAddress('/'. $request->path(), Str::lower($request->method()));
     }
 
     protected function toServerRequest(Request $request): ServerRequestInterface
