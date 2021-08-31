@@ -149,22 +149,22 @@ class LeagueSchemaValidatorTest extends TestCase
             'Minimum value' => [
                 'strict_limit',
                 0,
-                'Value must be greater than 1.',
+                'Value must be greater or equal to 1.',
             ],
             'Maximum value' => [
                 'strict_limit',
                 50,
-                'Value must be less than 25.',
+                'Value must be less or equal to 25.',
             ],
             'Exclusive limit minimum value' => [
                 'limit',
                 0,
-                'Value must be greater or equal to 1.',
+                'Value must be greater than 1.',
             ],
             'Exclusive limit maximum value' => [
                 'limit',
                 50,
-                'Value must be less or equal to 25.',
+                'Value must be less than 25.',
             ],
             'Min length' => [
                 'length',
