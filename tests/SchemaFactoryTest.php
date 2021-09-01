@@ -47,4 +47,20 @@ final class SchemaFactoryTest extends TestCase
 
         $this->assertTrue($thrown, 'Failed asserting an exception was thrown.');
     }
+
+    public function test_can_be_constructed_from_array(): void
+    {
+        $data = [
+            'type' => 'object',
+            'properties' => [
+                'example' => [
+                    'type' => 'string',
+                ],
+            ],
+        ];
+
+        $schema = SchemaFactory::fromArray($data);
+
+        $this->assertEquals($data, $schema->toArray());
+    }
 }
