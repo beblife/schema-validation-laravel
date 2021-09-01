@@ -36,7 +36,7 @@ The status code when a validation exception is thrown can also be customised her
 ## Usage
 
 ### Validating Requests
-This package provides a macro on the `Illumnite\Http\Request` class that will validate the request.
+This package provides a macro on the `Illumnite\Http\Request::class` that will validate the request's schema.
 
 ```php
 use Illuminate\Http\Request;
@@ -46,6 +46,8 @@ class UserRegistrationRequestHandler extends Controller
     public function __invoke(Request $request)
     {
         $request = $request->validateSchema();
+
+        // Validate any additional rules (if any) with $request->validate(...)
 
         // Process the valid request ...
     }
@@ -96,10 +98,37 @@ class UserRegistrationRequest extends FormRequest
 }
 ```
 
+The schema to use for validation will be resolved automatically from the configured OpenAPI specification file.
+This can be overwritten by defining a `schema()` on the `FormRequest::class`.
+
+```php
+
+use Beblife\SchemaValidation\Schema;
+use Beblife\SchemaValidation\ValidateSchema;
+use Illuminate\Foundation\Http\FormRequest;
+
+class UserRegistrationRequest extends FormRequest
+{
+    use ValidateSchema;
+
+    public function schema(): Schema
+    {
+        return // Your custom defined schema ...
+    }
+
+    public function rules(): array
+    {
+        return [
+            // Your other validation rules ...
+        ];
+    }
+}
+```
+
 ### Defining Schema's
 
 By default the package will use the schema's defined the configured specification when validating requests.
-There is also the option to pass a schema to the `validateSchema()` method using the provided facade:
+There is also the option to pass a `Beblife\SchemaValidation\Schema::class` to the `validateSchema()` method using the provided facade:
 
 #### From array
 ```php
@@ -136,7 +165,7 @@ class MyCustomSchema implements Schema
             'properties' => [
                 // ...
             ]
-        ]
+        ];
     }
 }
 ```
