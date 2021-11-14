@@ -1,15 +1,16 @@
 <?php
 
-namespace Beblife\SchemaValidation\Tests;
+namespace Beblife\SchemaValidation\Tests\Contracts;
 
-use Beblife\SchemaValidation\SchemaFactory;
 use InvalidArgumentException;
 
-final class SchemaFactoryTest extends TestCase
+trait SchemaFactoryTests
 {
+    abstract public function getSchemaFactoryClass(): string;
+
     public function test_it_can_construct_from_a_json_file(): void
     {
-        $schema = SchemaFactory::fromFile($this->schemaFixture('example.json'));
+        $schema = $this->getSchemaFactoryClass()::fromFile($this->schemaFixture('example.json'));
 
         $this->assertEquals([
             'type' => 'object',
@@ -23,7 +24,7 @@ final class SchemaFactoryTest extends TestCase
 
     public function test_it_can_construct_from_a_yaml_file(): void
     {
-        $schema = SchemaFactory::fromFile($this->schemaFixture('example.yaml'));
+        $schema = $this->getSchemaFactoryClass()::fromFile($this->schemaFixture('example.yaml'));
 
         $this->assertEquals([
             'type' => 'object',
@@ -40,7 +41,7 @@ final class SchemaFactoryTest extends TestCase
         $thrown = false;
 
         try {
-            SchemaFactory::fromFile($this->schemaFixture('example.txt'));
+            $this->getSchemaFactoryClass()::fromFile($this->schemaFixture('example.txt'));
         } catch(InvalidArgumentException $exception) {
             $thrown = true;
         }
@@ -59,7 +60,7 @@ final class SchemaFactoryTest extends TestCase
             ],
         ];
 
-        $schema = SchemaFactory::fromArray($data);
+        $schema = $this->getSchemaFactoryClass()::fromArray($data);
 
         $this->assertEquals($data, $schema->toArray());
     }
