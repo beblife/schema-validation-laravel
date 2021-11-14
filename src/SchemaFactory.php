@@ -2,7 +2,6 @@
 
 namespace Beblife\SchemaValidation;
 
-use Illuminate\Filesystem\Filesystem;
 use InvalidArgumentException;
 use Symfony\Component\Yaml\Yaml;
 use TypeError;
@@ -23,7 +22,7 @@ class SchemaFactory
 
     public function fromFile(string $schemaPath): Schema
     {
-        $contents = (new Filesystem())->get($schemaPath);
+        $contents = file_get_contents($schemaPath);
 
         try {
             return new static::$schema(json_decode($contents, true) ?? Yaml::parse($contents, Yaml::DUMP_OBJECT));
