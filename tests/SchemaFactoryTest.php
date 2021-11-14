@@ -7,9 +7,14 @@ use InvalidArgumentException;
 
 final class SchemaFactoryTest extends TestCase
 {
+    private function getFactory(): SchemaFactory
+    {
+        return $this->app->get(SchemaFactory::class);
+    }
+
     public function test_it_can_construct_from_a_json_file(): void
     {
-        $schema = SchemaFactory::fromFile($this->schemaFixture('example.json'));
+        $schema = $this->getFactory()->fromFile($this->schemaFixture('example.json'));
 
         $this->assertEquals([
             'type' => 'object',
@@ -23,7 +28,7 @@ final class SchemaFactoryTest extends TestCase
 
     public function test_it_can_construct_from_a_yaml_file(): void
     {
-        $schema = SchemaFactory::fromFile($this->schemaFixture('example.yaml'));
+        $schema = $this->getFactory()->fromFile($this->schemaFixture('example.yaml'));
 
         $this->assertEquals([
             'type' => 'object',
@@ -40,7 +45,7 @@ final class SchemaFactoryTest extends TestCase
         $thrown = false;
 
         try {
-            SchemaFactory::fromFile($this->schemaFixture('example.txt'));
+            $this->getFactory()->fromFile($this->schemaFixture('example.txt'));
         } catch(InvalidArgumentException $exception) {
             $thrown = true;
         }
@@ -59,7 +64,7 @@ final class SchemaFactoryTest extends TestCase
             ],
         ];
 
-        $schema = SchemaFactory::fromArray($data);
+        $schema = $this->getFactory()->fromArray($data);
 
         $this->assertEquals($data, $schema->toArray());
     }
