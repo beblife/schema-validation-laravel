@@ -272,7 +272,7 @@ class LeagueSchemaValidatorTest extends TestCase
             'Invalid pattern' => [
                 'pattern',
                 'invalid-pattern',
-                "Data does not match pattern '#^(\([0-9]{3}\))?[0-9]{3}-[0-9]{4}$#u'.",
+                "Data does not match pattern '#^(\([0-9]{3}\))?[0-9]{3}-[0-9]{4}$#'.",
             ],
             'Invalid multiple of' => [
                 'multiple_of',
