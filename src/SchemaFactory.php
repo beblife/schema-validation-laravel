@@ -2,9 +2,27 @@
 
 namespace Beblife\SchemaValidation;
 
-interface SchemaFactory
-{
-    public static function fromArray(array $schema): Schema;
+use Beblife\SchemaValidation\Schemas\CebeSpecSchema;
+use Illuminate\Filesystem\Filesystem;
+use InvalidArgumentException;
+use Symfony\Component\Yaml\Yaml;
+use TypeError;
 
-    public static function fromFile(string $schemaPath): Schema;
+class SchemaFactory
+{
+    public static function fromArray(array $schema): Schema
+    {
+        return new CebeSpecSchema($schema);
+    }
+
+    public static function fromFile(string $schemaPath): Schema
+    {
+        $contents = (new Filesystem())->get($schemaPath);
+
+        try {
+            return new CebeSpecSchema(json_decode($contents, true) ?? Yaml::parse($contents, Yaml::DUMP_OBJECT));
+        } catch(TypeError $e) {
+            throw new InvalidArgumentException('Only valid OpenAPI JSON or YAML files are supported.');
+        }
+    }
 }
