@@ -3,6 +3,7 @@
 namespace Beblife\SchemaValidation;
 
 use Beblife\SchemaValidation\Facades\SchemaValidation;
+use Beblife\SchemaValidation\Schemas\CebeSpecSchema;
 use Beblife\SchemaValidation\Validators\LeagueSchemaValidator;
 use Illuminate\Http\Request;
 use Spatie\LaravelPackageTools\Package;
@@ -23,6 +24,8 @@ class SchemaValidationServiceProvider extends PackageServiceProvider
         $this->app->bind(SchemaValidator::class, function () {
             return new LeagueSchemaValidator(config()->get('schema-validation.spec_path'));
         });
+
+        $this->app->when(SchemaFactory::class)->needs('$schema')->give(CebeSpecSchema::class);
     }
 
     public function bootingPackage(): void
