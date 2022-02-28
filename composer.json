@@ -11,7 +11,7 @@
         "php": "^7.4|^8.0",
         "guzzlehttp/psr7": "^1.8",
         "league/openapi-psr7-validator": "^0.16",
-        "spatie/laravel-package-tools": "dev-master"
+        "spatie/laravel-package-tools": "^1.11"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.18",
