@@ -138,6 +138,38 @@ class LeagueSchemaValidatorTest extends TestCase
         $this->fail('A validation exception was not thrown for parameter: '. $param);
     }
 
+    public function test_it_validates_required_missing_query_parameters(): void
+    {
+        $validator = new LeagueSchemaValidator($this->specFixture('validation.v30.json'));
+        $request = $this->createRequest('GET', '/missing-parameters');
+
+        try {
+            $validator->validate($request);
+        } catch(InvalidSchema $exception) {
+           $this->assertFormattedValidationException($exception, 'missing', "Field 'missing' is required.");
+
+            return;
+        }
+
+        $this->fail('A validation exception was not thrown for a missing query parameter');
+    }
+
+    public function test_it_validates_required_missing_body_parameters(): void
+    {
+        $validator = new LeagueSchemaValidator($this->specFixture('validation.v30.json'));
+        $request = $this->createRequest('POST', '/missing-parameters');
+
+        try {
+            $validator->validate($request);
+        } catch(InvalidSchema $exception) {
+           $this->assertFormattedValidationException($exception, 'missing', "Field 'missing' is required.");
+
+            return;
+        }
+
+        $this->fail('A validation exception was not thrown for a missing body parameter');
+    }
+
     public function invalidData(): array
     {
         return [

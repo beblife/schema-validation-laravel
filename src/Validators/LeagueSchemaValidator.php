@@ -6,7 +6,6 @@ use Beblife\SchemaValidation\Exceptions\InvalidSchema;
 use Beblife\SchemaValidation\Exceptions\UnableToValidateSchema;
 use Beblife\SchemaValidation\Schema;
 use Beblife\SchemaValidation\SchemaValidator;
-use cebe\openapi\exceptions\TypeErrorException;
 use cebe\openapi\Reader;
 use cebe\openapi\spec\Schema as SpecSchema;
 use GuzzleHttp\Psr7\ServerRequest;
@@ -15,6 +14,7 @@ use Illuminate\Support\Str;
 use League\OpenAPIValidation\PSR7\Exception\NoPath;
 use League\OpenAPIValidation\PSR7\Exception\Validation\InvalidBody;
 use League\OpenAPIValidation\PSR7\Exception\Validation\InvalidQueryArgs;
+use League\OpenAPIValidation\PSR7\Exception\Validation\RequiredParameterMissing;
 use League\OpenAPIValidation\PSR7\ServerRequestValidator;
 use League\OpenAPIValidation\PSR7\ValidatorBuilder;
 use League\OpenAPIValidation\Schema\Exception\KeywordMismatch;
@@ -43,6 +43,9 @@ class LeagueSchemaValidator implements SchemaValidator
         }
     }
 
+    /**
+     * @throws InvalidSchema
+     */
     public function validate(Request $request, ?Schema $schema = null): Request
     {
         try {
@@ -55,39 +58,35 @@ class LeagueSchemaValidator implements SchemaValidator
             }
         } catch(NoPath $exception) {
             throw UnableToValidateSchema::becauseNoSchemaForRequest($request);
+        } catch(InvalidQueryArgs $exception) {
+            if($exception->getPrevious() instanceof RequiredParameterMissing) {
+                throw InvalidSchema::becauseMissingRequiredKeyword(
+                    $exception->getPrevious()->name(),
+                    "Field '{$exception->getPrevious()->name()}' is required.",
+                );
+            }
+
+            throw $this->validationException($exception->getPrevious()->getPrevious());
+        } catch(InvalidBody $exception) {
+            throw $this->validationException($exception->getPrevious());
+        } catch (KeywordMismatch $keywordMismatch) {
+            throw $this->validationException($keywordMismatch);
         }
 
         return $request;
     }
 
-    /**
-     * @throws InvalidSchema
-     */
     protected function validateFromSpec(Request $request): void
     {
-        try {
-            $this->validator->validate($this->toServerRequest($request));
-        } catch(InvalidQueryArgs $exeception) {
-            throw $this->validationException($exeception->getPrevious()->getPrevious());
-        } catch(InvalidBody $exception) {
-            throw $this->validationException($exception->getPrevious());
-        }
+        $this->validator->validate($this->toServerRequest($request));
     }
 
-    /**
-     * @throws InvalidSchema
-     * @throws TypeErrorException
-     */
     protected function validateForSchema(Request $request, Schema $schema): void
     {
         $validator = new LeagueValidator(LeagueValidator::VALIDATE_AS_REQUEST);
         $specSchema = Reader::readFromJson(json_encode($schema->toArray()), SpecSchema::class);
 
-        try {
-            $validator->validate($request->all(), $specSchema);
-        } catch (KeywordMismatch $keywordMismatch) {
-            throw $this->validationException($keywordMismatch);
-        }
+        $validator->validate($request->all(), $specSchema);
     }
 
     protected function toServerRequest(Request $request): ServerRequestInterface
@@ -139,6 +138,8 @@ class LeagueSchemaValidator implements SchemaValidator
             'Size of an array' => 'Size',
             'All array' => 'All',
             "The number of object's" => 'Object',
+            'Required property ' => 'Field ',
+            ' must be present in the object' => ' is required',
          ] as $search => $replace) {
             $message = str_replace($search, $replace, $message);
          }

@@ -14,6 +14,15 @@ class InvalidSchema extends ValidationException
         $this->status = config('schema-validation.response.status', $this->status);
     }
 
+    public static function becauseMissingRequiredKeyword(string $key, string $message): self
+    {
+        return self::withMessages([
+            $key => [
+                $message,
+            ],
+        ]);
+    }
+
     public static function becauseInvalidKeyword(string $key, string $message): self
     {
         return self::withMessages([
