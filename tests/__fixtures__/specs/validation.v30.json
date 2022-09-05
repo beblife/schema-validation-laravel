@@ -192,6 +192,39 @@
                     }
                 }
             }
+        },
+        "/missing-parameters": {
+            "get": {
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "missing",
+                        "required": true,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ]
+            },
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "missing": {
+                                        "type": "boolean"
+                                    }
+                                },
+                                "required": [
+                                    "missing"
+                                ]
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

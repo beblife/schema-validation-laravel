@@ -14,6 +14,7 @@ use Illuminate\Support\Str;
 use League\OpenAPIValidation\PSR7\Exception\NoPath;
 use League\OpenAPIValidation\PSR7\Exception\Validation\InvalidBody;
 use League\OpenAPIValidation\PSR7\Exception\Validation\InvalidQueryArgs;
+use League\OpenAPIValidation\PSR7\Exception\Validation\RequiredParameterMissing;
 use League\OpenAPIValidation\PSR7\ServerRequestValidator;
 use League\OpenAPIValidation\PSR7\ValidatorBuilder;
 use League\OpenAPIValidation\Schema\Exception\KeywordMismatch;
@@ -58,6 +59,13 @@ class LeagueSchemaValidator implements SchemaValidator
         } catch(NoPath $exception) {
             throw UnableToValidateSchema::becauseNoSchemaForRequest($request);
         } catch(InvalidQueryArgs $exception) {
+            if($exception->getPrevious() instanceof RequiredParameterMissing) {
+                throw InvalidSchema::becauseMissingRequiredKeyword(
+                    $exception->getPrevious()->name(),
+                    "Field '{$exception->getPrevious()->name()}' is required.",
+                );
+            }
+
             throw $this->validationException($exception->getPrevious()->getPrevious());
         } catch(InvalidBody $exception) {
             throw $this->validationException($exception->getPrevious());
@@ -130,6 +138,8 @@ class LeagueSchemaValidator implements SchemaValidator
             'Size of an array' => 'Size',
             'All array' => 'All',
             "The number of object's" => 'Object',
+            'Required property ' => 'Field ',
+            ' must be present in the object' => ' is required',
          ] as $search => $replace) {
             $message = str_replace($search, $replace, $message);
          }
