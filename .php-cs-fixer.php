@@ -1,6 +1,9 @@
 <?php
 
-$finder = Symfony\Component\Finder\Finder::create()
+$config = new PhpCsFixer\Config();
+
+$config->setFinder(
+    Symfony\Component\Finder\Finder::create()
     ->in([
         __DIR__ . '/src',
         __DIR__ . '/tests',
@@ -11,16 +14,14 @@ $finder = Symfony\Component\Finder\Finder::create()
     ->notName('*.blade.php')
     ->ignoreDotFiles(true)
     ->ignoreVCS(true)
-;
-
-$config = new PhpCsFixer\Config();
+);
 
 return $config->setRules([
     'array_syntax' => ['syntax' => 'short'],
-    'ordered_imports' => ['sortAlgorithm' => 'alpha'],
+    'ordered_imports' => ['sort_algorithm' => 'alpha'],
     'no_unused_imports' => true,
     'not_operator_with_successor_space' => true,
-    'trailing_comma_in_multiline_array' => true,
+    'trailing_comma_in_multiline' => ['elements' => ['arrays']],
     'phpdoc_scalar' => true,
     'unary_operator_spaces' => true,
     'binary_operator_spaces' => true,
